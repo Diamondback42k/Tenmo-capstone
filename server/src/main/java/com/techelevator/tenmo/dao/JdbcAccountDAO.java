@@ -55,19 +55,19 @@ public class JdbcAccountDAO implements AccountDAO { //this will have our 'SQL' s
 //        return result;
 //    }
 
-    @Override
-    public Account findAccountByUserId(int userId) {
-        String sql = "SELECT * FROM account WHERE user_id = ?;";
-        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, userId);
-        try{
-            if(rowSet.next()){
-                return mapRowsToUser(rowSet);
-        }
-        }catch(Exception e){
-            System.out.println("Account not found: User ID invalid");
-        }
-       
-    }
+//    @Override
+//    public Account findAccountByUserId(int userId) {
+//        String sql = "SELECT * FROM account WHERE user_id = ?;";
+//        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(sql, userId);
+//        try{
+//            if(rowSet.next()){
+//                return mapRowsToUser(rowSet);
+//        }
+//        }catch(Exception e){
+//            System.out.println("Account not found: User ID invalid");
+//        }
+//
+//    }
 
     private Account mapRowsToUser(SqlRowSet rowset) {
         Account account = new Account();
