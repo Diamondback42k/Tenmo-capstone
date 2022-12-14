@@ -16,12 +16,12 @@ public class JdbcAccountDAO implements AccountDAO { //this will have our 'SQL' s
 
     private JdbcTemplate jdbcTemplate;
 
-    public JdbcAccountDAO(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public JdbcAccountDAO(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
         }
 
     @Override
-    public List<Account> findAllAccounts() {
+    public List<Account> getAccounts() {
         List<Account> accounts = new ArrayList<>();
         String sql = "SELECT * FROM account;";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
@@ -43,17 +43,19 @@ public class JdbcAccountDAO implements AccountDAO { //this will have our 'SQL' s
                 return null;
     }
 
+    @Override
+    public Account getAccount(int accountId) {
+        String sql = "SELECT * FROM account where Account_id = ?;";
+        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, accountId);
 
-//
-//    @RequestMapping( path = "/todos/{id}", method = RequestMethod.GET)
-//    public Todo getById(@PathVariable int id) {
-//        Todo result = dao.getTodoById(id);
-//        if (result == null) {
-//            // 404 Not found
-//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "To-do not found", null);
-//        }
-//        return result;
-//    }
+        Account account = null;
+        if(result.next()){
+            account = mapRowsToUser(result);
+        }
+        return account;
+    }
+
+
 
 //    @Override
 //    public Account findAccountByUserId(int userId) {
@@ -71,9 +73,9 @@ public class JdbcAccountDAO implements AccountDAO { //this will have our 'SQL' s
 
     private Account mapRowsToUser(SqlRowSet rowset) {
         Account account = new Account();
-        account.setUser_id(Integer.parseInt("user_id"));
-        account.setAccount_id(Integer.parseInt("account_id"));
-        account.setBalance(BigDecimal.valueOf(Double.parseDouble("balance")));
+        account.setUserId(rowset.getInt("user_id"));
+        account.setAccountId(rowset.getInt("account_id"));
+        account.setBalance(rowset.getBigDecimal("balance"));
 
         return account;
     }
