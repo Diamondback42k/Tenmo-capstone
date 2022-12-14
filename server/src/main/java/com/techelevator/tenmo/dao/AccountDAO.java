@@ -10,10 +10,8 @@ public interface AccountDAO {
 
     List<Account> findAllAccounts();
 
-    BigDecimal getBalance(BigDecimal balance);
+    BigDecimal getBalance(int accountId);
 
-    Account findAccountId(int accountId);
-
-    int findAccountByUserId(int userId);
+    Account findAccountByUserId(int userId);
 
 }
