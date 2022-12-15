@@ -17,7 +17,6 @@ public class Account {
     }
 
     public Account() {
-
     }
 
     public int getAccountId() {
