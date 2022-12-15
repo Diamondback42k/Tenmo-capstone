@@ -44,9 +44,9 @@ CREATE TABLE transfer (
 	receiver_account_id int NOT NULL,
 	transfer_amount numeric(13,2) NOT NULL,
 	CONSTRAINT PK_transfer PRIMARY KEY (transfer_id),
-	CONSTRAINT FK_a
+	CONSTRAINT FK_transfer_account FOREIGN KEY (account_id) REFERENCES account (account_id)
 
-)
+);
 	
 
 
