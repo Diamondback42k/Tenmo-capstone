@@ -2,6 +2,7 @@ package com.techelevator.tenmo.model;
 
 import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -97,4 +98,14 @@ public class User {
               ", authorities=" + authorities +
               '}';
    }
+
+
+
+
+
+
+
+
+
+
 }

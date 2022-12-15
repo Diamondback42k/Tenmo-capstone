@@ -2,6 +2,7 @@ package com.techelevator.tenmo.controller;
 
 import com.techelevator.tenmo.dao.AccountDAO;
 import com.techelevator.tenmo.dao.JdbcAccountDAO;
+import com.techelevator.tenmo.dao.JdbcUserDao;
 import com.techelevator.tenmo.dao.UserDao;
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.User;
@@ -18,16 +19,16 @@ import java.util.List;
 
 @RestController
 @PreAuthorize("isAuthenticated()")
-@RequestMapping("/accounts")
 public class AccountController {
 
         @Autowired
         AccountDAO dao;
+        @Autowired
         UserDao userDao;
         private Account account;
 
         @PreAuthorize("hasRole('USER')")
-        @RequestMapping(method = RequestMethod.GET)
+        @RequestMapping(path = "/accounts/getusers", method = RequestMethod.GET)
         public List<User> findAll(){
                 return userDao.findAll();
                 }
