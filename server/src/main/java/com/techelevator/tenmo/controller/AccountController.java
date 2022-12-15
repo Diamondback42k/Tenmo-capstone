@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -34,6 +35,14 @@ public class AccountController {
                         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Account Not Found");
                 }
                 return account;
+        }
+
+        @PreAuthorize("hasRole('USER')")
+        @RequestMapping(path = "/{id}", method = RequestMethod.GET )
+        public BigDecimal getBalance(@PathVariable int accountId) {
+                BigDecimal balance = dao.getBalance(accountId);
+
+                return balance;
         }
 
 }
