@@ -4,17 +4,13 @@ import com.techelevator.tenmo.dao.*;
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
-import com.techelevator.tenmo.model.Username;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -22,7 +18,7 @@ import java.util.List;
 public class AccountController {
 
         @Autowired
-        transferInterface transferDao;
+        TransferDao transferDao;
         @Autowired
         AccountDAO dao;
         @Autowired
@@ -33,6 +29,14 @@ public class AccountController {
         public List<User> findAll(){
                 return userDao.findAll();
                 }
+
+        @PreAuthorize("hasRole('USER')")
+        @RequestMapping(path = "/accounts/get-accounts", method = RequestMethod.GET)
+        public List<Account> findAccounts() {
+                return dao.getAccounts();
+        }
+
+
 
         @PreAuthorize("hasRole('USER')")
         @RequestMapping(path = "/get-account", method = RequestMethod.GET)
@@ -59,9 +63,12 @@ public class AccountController {
 
         @PreAuthorize("hasRole('USER')")
         @RequestMapping(path = "/transfer-create", method = RequestMethod.POST)
-        public void createTransfer(@Valid @RequestParam int receiverAccountID, @RequestParam BigDecimal amount){
+        public Transfer createTransfer(Principal principal){
 
-                System.out.println(transferDao.create(receiverAccountID, amount));
+                int userID = userDao.findIdByUsername(principal.getName());
+                int accountId = dao.findAccountByUserId(userID);
+
+
         }
 
 
