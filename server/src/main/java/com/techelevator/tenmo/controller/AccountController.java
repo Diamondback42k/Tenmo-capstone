@@ -65,7 +65,7 @@ public class AccountController {
         @RequestMapping(path = "/transfer-create", method = RequestMethod.POST)
         public void createTransfer(Principal principal){
 
-//                We need to build this out next
+
              ;
 
         }
