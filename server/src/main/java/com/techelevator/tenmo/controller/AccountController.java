@@ -6,6 +6,7 @@ import com.techelevator.tenmo.dao.JdbcUserDao;
 import com.techelevator.tenmo.dao.UserDao;
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.User;
+import com.techelevator.tenmo.model.Username;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -58,9 +59,37 @@ public class AccountController {
 
         @PreAuthorize("hasRole('USER')")
         @RequestMapping(path = "/transfer-create", method = RequestMethod.POST)
-        public Account createTransfer(){
-                return null;
+        public List<Username> createTransfer(Account receiverAccount){
+                return userDao.findUserList();
+
         }
+
+
+
+        @PreAuthorize("hasRole('USER')")
+        @RequestMapping(path = "/transfer-update", method = RequestMethod.PUT)
+        BigDecimal transferUpdate(BigDecimal transferAmount, Username receivingUser, Principal principal) {
+
+                int userID  = userDao.findIdByUsername(principal.getName());
+                String sendingUsername =
+
+                if (dao.getBalance(userID).compareTo(transferAmount) > 0) {
+                        if (dao.withdrawAccount(, transferAmount)) {
+                             dao.depositAccount(receivingUser, transferAmount);
+                        }
+
+
+                }
+
+                return BigDecimal.valueOf(0);
+
+
+        }
+
+
+
+
+
 //              The Above method is the first of two methods needed for the transfer:
         //      1.) create a POST method that create and inserts the data so our user can have a LIST of choices to choose from
         //      2.) create an update method that updates the account balances between the sender and receiver

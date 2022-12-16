@@ -2,6 +2,7 @@ package com.techelevator.tenmo.dao;
 
 
 import com.techelevator.tenmo.model.Account;
+import com.techelevator.tenmo.model.Username;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
@@ -65,6 +66,25 @@ public class JdbcAccountDAO implements AccountDAO { //this will have our 'SQL' s
             account = mapRowsToUser(result);
         }
         return account;
+    }
+
+    @Override
+    public Boolean depositAccount(Username receivingUsername, BigDecimal transferAmount) {
+        String sql = "UPDATE account SET balance = balance + ? WHERE account_id = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, receivingUsername, transferAmount);
+
+
+        return true;
+
+    }
+
+    @Override
+    public Boolean withdrawAccount(Username username, BigDecimal transferAmount) {
+        String sql = "UPDATE account SET balance = balance - ? WHERE account_id = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, username, transferAmount);
+
+
+        return true;
     }
 
     private Account mapRowsToUser(SqlRowSet rowset) {
