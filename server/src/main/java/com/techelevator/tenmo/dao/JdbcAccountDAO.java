@@ -69,9 +69,9 @@ public class JdbcAccountDAO implements AccountDAO { //this will have our 'SQL' s
     }
 
     @Override
-    public Boolean depositAccount(Username receivingUsername, BigDecimal transferAmount) {
-        String sql = "UPDATE account SET balance = balance + ? WHERE account_id = ?";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, receivingUsername, transferAmount);
+    public Boolean depositAccount(int userIDReceiver, BigDecimal transferAmount) {
+        String sql = "UPDATE account SET balance = balance + ? WHERE user_id = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userIDReceiver, transferAmount);
 
 
         return true;
@@ -79,9 +79,9 @@ public class JdbcAccountDAO implements AccountDAO { //this will have our 'SQL' s
     }
 
     @Override
-    public Boolean withdrawAccount(Username username, BigDecimal transferAmount) {
-        String sql = "UPDATE account SET balance = balance - ? WHERE account_id = ?";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, username, transferAmount);
+    public Boolean withdrawAccount(int userIDSender, BigDecimal transferAmount) {
+        String sql = "UPDATE account SET balance = balance - ? WHERE user_id = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userIDSender, transferAmount);
 
 
         return true;

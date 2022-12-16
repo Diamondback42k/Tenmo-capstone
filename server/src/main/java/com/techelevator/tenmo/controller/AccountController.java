@@ -1,10 +1,8 @@
 package com.techelevator.tenmo.controller;
 
-import com.techelevator.tenmo.dao.AccountDAO;
-import com.techelevator.tenmo.dao.JdbcAccountDAO;
-import com.techelevator.tenmo.dao.JdbcUserDao;
-import com.techelevator.tenmo.dao.UserDao;
+import com.techelevator.tenmo.dao.*;
 import com.techelevator.tenmo.model.Account;
+import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.Username;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +21,8 @@ import java.util.List;
 @PreAuthorize("isAuthenticated()")
 public class AccountController {
 
+        @Autowired
+        transferInterface transferDao;
         @Autowired
         AccountDAO dao;
         @Autowired
@@ -59,31 +59,26 @@ public class AccountController {
 
         @PreAuthorize("hasRole('USER')")
         @RequestMapping(path = "/transfer-create", method = RequestMethod.POST)
-        public List<Username> createTransfer(Account receiverAccount){
-                return userDao.findUserList();
+        public void createTransfer(@Valid @RequestParam int receiverAccountID, @RequestParam BigDecimal amount){
 
+                System.out.println(transferDao.create(receiverAccountID, amount));
         }
 
 
 
         @PreAuthorize("hasRole('USER')")
         @RequestMapping(path = "/transfer-update", method = RequestMethod.PUT)
-        BigDecimal transferUpdate(BigDecimal transferAmount, Username receivingUser, Principal principal) {
+        BigDecimal transferUpdate(BigDecimal transferAmount, int accountID, Principal principal) {
 
-                int userID  = userDao.findIdByUsername(principal.getName());
-                String sendingUsername =
+                int userIDSender  = userDao.findIdByUsername(principal.getName());
 
-                if (dao.getBalance(userID).compareTo(transferAmount) > 0) {
-                        if (dao.withdrawAccount(, transferAmount)) {
-                             dao.depositAccount(receivingUser, transferAmount);
+
+                if (dao.getBalance(userIDSender).compareTo(transferAmount) >= 0) {
+                        if (dao.withdrawAccount(userIDSender,transferAmount)) {
+                             dao.depositAccount(accountID, transferAmount);
                         }
-
-
                 }
-
                 return BigDecimal.valueOf(0);
-
-
         }
 
 

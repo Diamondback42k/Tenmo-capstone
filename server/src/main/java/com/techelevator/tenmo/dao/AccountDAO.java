@@ -17,8 +17,8 @@ public interface AccountDAO {
 
     Account getAccount(int accountId);
 
-    Boolean depositAccount(Username username, BigDecimal transferAmount);
+    Boolean depositAccount(int userIDReceiver, BigDecimal transferAmount);
 
-    Boolean withdrawAccount(Username username, BigDecimal transferAmount);
+    Boolean withdrawAccount(int userIDSender, BigDecimal transferAmount);
 
 }
