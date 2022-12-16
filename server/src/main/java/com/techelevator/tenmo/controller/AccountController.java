@@ -63,11 +63,10 @@ public class AccountController {
 
         @PreAuthorize("hasRole('USER')")
         @RequestMapping(path = "/transfer-create", method = RequestMethod.POST)
-        public Transfer createTransfer(Principal principal){
+        public void createTransfer(Principal principal){
 
-                int userID = userDao.findIdByUsername(principal.getName());
-                int accountId = dao.findAccountByUserId(userID);
-
+//                We need to build this out next
+             ;
 
         }
 

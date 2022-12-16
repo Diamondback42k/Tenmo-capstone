@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,13 +53,14 @@ public class JdbcTransferDAO implements TransferDao {
 
         String sql = "INSERT INTO transfer (account_id, receiver_account_id, transfer_amount) VALUES (?,?,?) RETURNING transfer_id";
 
-        SqlRowSet result = jdbcTemplate.queryForRowSet(sql, Integer.class, receiverAccountID, amount);
+        Integer newTransferId = null;
+
+        newTransferId = jdbcTemplate.queryForObject(sql, Integer.class, receiverAccountID, amount);
+
+        System.out.println(newTransferId);
 
         Transfer transfer = null;
-        if (result.next()) {
-            transfer = mapRowToTransfer(result);
 
-        }
         return transfer;
 
     }
