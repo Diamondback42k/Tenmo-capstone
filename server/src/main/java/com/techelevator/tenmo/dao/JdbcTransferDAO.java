@@ -49,20 +49,12 @@ public class JdbcTransferDAO implements TransferDao {
     }
 
     @Override
-    public Transfer create(int receiverAccountID, BigDecimal amount) {
+    public Transfer create(int senderAccountID, int receiverAccountID) {
 
         String sql = "INSERT INTO transfer (account_id, receiver_account_id, transfer_amount) VALUES (?,?,?) RETURNING transfer_id";
+        int newTransferId = jdbcTemplate.queryForObject(sql, Integer.class, senderAccountID, receiverAccountID);
 
-        Integer newTransferId = null;
-
-        newTransferId = jdbcTemplate.queryForObject(sql, Integer.class, receiverAccountID, amount);
-
-        System.out.println(newTransferId);
-
-        Transfer transfer = null;
-
-        return transfer;
-
+        return getTransfer(newTransferId);
     }
 
 

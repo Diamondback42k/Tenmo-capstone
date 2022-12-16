@@ -3,6 +3,7 @@ package com.techelevator.tenmo.dao;
 
 import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Username;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
@@ -55,6 +56,33 @@ public class JdbcAccountDAO implements AccountDAO { //this will have our 'SQL' s
         }
         return account;
     }
+
+    @Override
+    public int accountIdByUserId(int userID){
+        String sql = "SELECT account_id FROM transfer JOIN account ON transfer.account_id = account.account_id" +
+                " WHERE user_id = ?;";
+        Integer accountId;
+        try{
+            accountId = jdbcTemplate.queryForObject(sql,Integer.class, userID);
+        } catch (DataAccessException e) {
+            return 0;
+        }
+
+        return accountId;
+    }
+
+    @Override
+    public int receiverId(int accountId){
+        String sql = "SELECT receiver_account_id FROM transfer WHERE account_id = ?;";
+        Integer receivingId;
+        try{
+            receivingId = jdbcTemplate.queryForObject(sql, Integer.class, accountId);
+        } catch(DataAccessException e) {
+            return 0;
+        }
+
+        return receivingId;
+}
 
     @Override
     public Account getAccount(int accountId) {

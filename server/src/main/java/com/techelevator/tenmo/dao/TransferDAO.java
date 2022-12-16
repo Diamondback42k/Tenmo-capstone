@@ -10,7 +10,7 @@ public interface TransferDao {
     List<Transfer> getTransfers();
 
     Transfer getTransfer(int transferID);
+    Transfer create(int senderAccountID, int receiverAccountID);
 
-    Transfer create(int receiverAccountID, BigDecimal amount);
 
 }

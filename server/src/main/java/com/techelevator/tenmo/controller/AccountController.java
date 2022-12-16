@@ -63,10 +63,12 @@ public class AccountController {
 
         @PreAuthorize("hasRole('USER')")
         @RequestMapping(path = "/transfer-create", method = RequestMethod.POST)
-        public void createTransfer(Principal principal){
+        public Transfer createTransfer(Principal principal){
 
-
-             ;
+                int userID = userDao.findIdByUsername(principal.getName());
+                int accountId = dao.accountIdByUserId(userID);
+                
+                return transferDao.create(accountId,);
 
         }
 
@@ -74,7 +76,7 @@ public class AccountController {
 
         @PreAuthorize("hasRole('USER')")
         @RequestMapping(path = "/transfer-update", method = RequestMethod.PUT)
-        BigDecimal transferUpdate(BigDecimal transferAmount, int accountID, Principal principal) {
+       public BigDecimal transferUpdate(BigDecimal transferAmount, int accountID, Principal principal) {
 
                 int userIDSender  = userDao.findIdByUsername(principal.getName());
 

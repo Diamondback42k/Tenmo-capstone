@@ -15,6 +15,10 @@ public interface AccountDAO {
 
     Account findAccountByUserId(int userId);
 
+    int accountIdByUserId (int userID);
+
+    int receiverId(int accountId );
+
     Account getAccount(int accountId);
 
     Boolean depositAccount(int userIDReceiver, BigDecimal transferAmount);
