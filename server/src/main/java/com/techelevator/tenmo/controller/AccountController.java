@@ -66,9 +66,9 @@ public class AccountController {
         public Transfer createTransfer(Principal principal){
 
                 int userID = userDao.findIdByUsername(principal.getName());
-                int accountId = dao.findAccountByUserId(userID);
-
-
+                Account account = dao.findAccountByUserId(userID);
+                //Account----->account id 
+                return transferDao.create(); //We need to find the receiving account id and big decimal amount
         }
 
 
