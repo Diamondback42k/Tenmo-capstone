@@ -5,13 +5,13 @@ import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 
 public class Transfer {
-    @Min(value = 0, message = "value must be greater than 0.")
+//    @Min(value = 0, message = "value must be greater than 0.")
     private BigDecimal amount;
-    @NotBlank(message = "field cannot be equal to userIDSender.")
+//    @NotBlank(message = "field cannot be equal to userIDSender.")
     private int userIDReceiver;
-    @NotBlank(message = "field cannot be empty")
+//    @NotBlank(message = "field cannot be empty")
     private int userIDSender;
-    @NotBlank(message = "field cannot be duplicate")
+//    @NotBlank(message = "field cannot be duplicate")
     private int transferID;
 
     public Transfer(BigDecimal amount, int userIDReceiver, int userIDSender,int transferID){
