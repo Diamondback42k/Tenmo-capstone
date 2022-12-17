@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class JdbcAccountDao implements AccountDao { //this will have our 'SQL' statements and methods
+public class JdbcAccountDAO implements AccountDAO { //this will have our 'SQL' statements and methods
 
     private JdbcTemplate jdbcTemplate;
 
-    public JdbcAccountDao(DataSource dataSource) {
+    public JdbcAccountDAO(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         }
 
@@ -58,8 +58,7 @@ public class JdbcAccountDao implements AccountDao { //this will have our 'SQL' s
 
     @Override
     public int accountIdByUserId(int userID){
-        String sql = "SELECT account_id FROM transfer JOIN account ON transfer.account_id = account.account_id" +
-                " WHERE user_id = ?;";
+        String sql = "SELECT account_id FROM account WHERE user_id = ?;";
         Integer accountId;
         try{
             accountId = jdbcTemplate.queryForObject(sql,Integer.class, userID);

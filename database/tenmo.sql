@@ -42,7 +42,7 @@ CREATE SEQUENCE seq_transfer_id
  NO MAXVALUE;
 	
 CREATE TABLE transfer (
-transfer_id int NOT NULL,
+transfer_id int NOT NULL DEFAULT nextval('seq_transfer_id'),
 	account_id int NOT NULL,
 	receiver_account_id int NOT NULL,
 	transfer_amount numeric(13,2) NOT NULL,

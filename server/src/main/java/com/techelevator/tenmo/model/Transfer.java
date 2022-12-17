@@ -1,7 +1,5 @@
 package com.techelevator.tenmo.model;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 
 public class Transfer {
@@ -16,7 +14,7 @@ public class Transfer {
 
     public Transfer(BigDecimal amount, int userIDReceiver, int userIDSender,int transferID){
         this.amount = amount;
-        this. userIDReceiver = userIDReceiver;
+        this.userIDReceiver = userIDReceiver;
         this.userIDSender = userIDSender;
         this.transferID = transferID;
     }
@@ -34,7 +32,7 @@ public class Transfer {
     }
 
     public int getUserIDSender() {
-        return userIDSender;
+        return this.userIDSender;
     }
 
     public void setUserIDSender(int userIDSender) {
@@ -53,4 +51,7 @@ public class Transfer {
         return transferID;
     }
 
+    public void setTransferID(int transferID) {
+        this.transferID = transferID;
+    }
 }

@@ -17,9 +17,9 @@ import java.util.List;
 public class AccountController {
 
         @Autowired
-        TransferDao transferDao;
+        TransferDAO transferDao;
         @Autowired
-        AccountDao dao;
+        AccountDAO dao;
         @Autowired
         UserDao userDao;
 
@@ -62,8 +62,10 @@ public class AccountController {
 
         @PreAuthorize("hasRole('USER')")
         @RequestMapping(path = "/transfer-create", method = RequestMethod.POST)
-        public Transfer createTransfer(@RequestBody Transfer transfer){
-
+        public Transfer createTransfer(@RequestBody Transfer transfer, Principal principal){
+                int senderID = userDao.findIdByUsername(principal.getName());
+                int accountID = dao.accountIdByUserId(senderID);
+                transfer.setUserIDSender(accountID);
                 return transferDao.createTransfer(transfer);
 
         }

@@ -1,6 +1,8 @@
 package com.techelevator.tenmo.dao;
 
 import com.techelevator.tenmo.model.Transfer;
+import com.techelevator.tenmo.model.Username;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
@@ -12,13 +14,21 @@ import java.util.List;
 
 @Component
 
-public class JdbcTransferDao implements TransferDao {
+public class JdbcTransferDao implements TransferDAO {
 
     private JdbcTemplate jdbcTemplate;
 
     public JdbcTransferDao(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
+
+//    @Override
+//    public Transfer senderFunction(){
+//        String sql = "SELECT SUM(account.account_balance) - SUM(transfer.transfer_amount) " +
+//                "FROM account" +
+//                "JOIN transfer ON "
+//
+//    }
 
 
     @Override
@@ -48,24 +58,27 @@ public class JdbcTransferDao implements TransferDao {
 
 
     @Override
-    public Transfer createTransfer(Transfer newTransfer) {
-
-        int accountId = newTransfer.getUserIDSender();
-        int receiverAccountId = newTransfer.getUserIDReceiver();
-        BigDecimal transferAmount = newTransfer.getAmount();
-
+    public Transfer createTransfer(Transfer transfer) {
 
         String sql = "INSERT INTO transfer (account_id, receiver_account_id, transfer_amount) VALUES (?,?,?) RETURNING transfer_id";
-        int newTransferId = jdbcTemplate.queryForObject(sql, Integer.class, accountId, receiverAccountId, transferAmount);
 
-        return getTransfer(newTransferId);
+        Integer newTransferId;
+        try {
+
+             newTransferId = jdbcTemplate.queryForObject(sql, Integer.class, transfer.getUserIDSender(), transfer.getUserIDReceiver(), transfer.getAmount());
+             transfer.setTransferID(newTransferId);
+        //call up your methods to withdraw transfer amount------deposit method / withdraw method
+             return getTransfer(newTransferId);
+
+        }catch(DataAccessException e){
+            return null;
+        }
     }
 
     @Override
     public Boolean depositAccount(int userIDReceiver, BigDecimal transferAmount) {
         String sql = "UPDATE account SET balance = balance + ? WHERE user_id = ?";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userIDReceiver, transferAmount);
-
+        jdbcTemplate.update(sql, userIDReceiver, transferAmount);
 
         return true;
 
@@ -74,8 +87,7 @@ public class JdbcTransferDao implements TransferDao {
     @Override
     public Boolean withdrawAccount(int userIDSender, BigDecimal transferAmount) {
         String sql = "UPDATE account SET balance = balance - ? WHERE user_id = ?";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userIDSender, transferAmount);
-
+        jdbcTemplate.update(sql, userIDSender, transferAmount);
 
         return true;
     }
@@ -89,6 +101,11 @@ public class JdbcTransferDao implements TransferDao {
             return transfer;
         }
 
+    private Username mapRowToUsername(SqlRowSet rs) {
+        Username username = new Username();
+        username.setUsername(rs.getString("username"));
+        return username;
 
+    }
 
 }
