@@ -12,7 +12,7 @@ public class Transfer {
 //    @NotBlank(message = "field cannot be duplicate")
     private int transferID;
 
-    public Transfer(BigDecimal amount, int userIDReceiver, int userIDSender,int transferID){
+    public Transfer(BigDecimal amount, int userIDReceiver, int userIDSender, int transferID){
         this.amount = amount;
         this.userIDReceiver = userIDReceiver;
         this.userIDSender = userIDSender;
@@ -47,8 +47,8 @@ public class Transfer {
         this.amount = amount;
     }
 
-    public int getTransferID(int transfer_id) {
-        return transferID;
+    public int getTransferID(int transferID) {
+        return transferID ;
     }
 
     public void setTransferID(int transferID) {

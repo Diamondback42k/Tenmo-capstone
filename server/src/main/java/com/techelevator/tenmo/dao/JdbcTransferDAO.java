@@ -1,5 +1,6 @@
 package com.techelevator.tenmo.dao;
 
+import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.Username;
 import org.springframework.dao.DataAccessException;
@@ -63,36 +64,36 @@ public class JdbcTransferDao implements TransferDAO {
         String sql = "INSERT INTO transfer (account_id, receiver_account_id, transfer_amount) VALUES (?,?,?) RETURNING transfer_id";
 
         Integer newTransferId;
+
         try {
 
              newTransferId = jdbcTemplate.queryForObject(sql, Integer.class, transfer.getUserIDSender(), transfer.getUserIDReceiver(), transfer.getAmount());
+
              transfer.setTransferID(newTransferId);
 
-             depositAccount(transfer.getUserIDReceiver(), transfer.getAmount());
+             depositAccount(transfer.getUserIDReceiver(), transfer.getAmount()); // I broke these down 3 different ways and none of them worked lol 
 
              withdrawAccount(transfer.getUserIDSender(), transfer.getAmount());
-
 
              return getTransfer(newTransferId);
 
         }catch(DataAccessException e){
+
             return null;
         }
     }
 
     @Override
-    public void depositAccount(int userIDReceiver, BigDecimal transferAmount) {
+    public void depositAccount(int UserIDReceiver, BigDecimal transferAmount) {
         String sql = "UPDATE account SET balance = balance + ? WHERE user_id = ?";
-        jdbcTemplate.update(sql, transferAmount, userIDReceiver);
-
-
+        jdbcTemplate.update(sql, UserIDReceiver, transferAmount);
 
     }
 
     @Override
-    public void withdrawAccount(int userIDSender, BigDecimal transferAmount) {
+    public void withdrawAccount(int UserIDSender, BigDecimal transferAmount) {
         String sql = "UPDATE account SET balance = balance - ? WHERE user_id = ?";
-        jdbcTemplate.update(sql, transferAmount, userIDSender);
+        jdbcTemplate.update(sql, UserIDSender, transferAmount);
 
     }
 
