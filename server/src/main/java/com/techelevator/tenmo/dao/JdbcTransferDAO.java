@@ -71,9 +71,11 @@ public class JdbcTransferDao implements TransferDAO {
 
              transfer.setTransferID(newTransferId);
 
-             depositAccount(transfer.getUserIDReceiver(), transfer.getAmount()); // I broke these down 3 different ways and none of them worked lol 
+             Transfer newTransfer = getTransfer(newTransferId);
 
-             withdrawAccount(transfer.getUserIDSender(), transfer.getAmount());
+             depositAccount(newTransfer.getUserIDReceiver(), newTransfer.getAmount()); // I broke these down 3 different ways and none of them worked lol
+
+             withdrawAccount(newTransfer.getUserIDSender(), newTransfer.getAmount());
 
              return getTransfer(newTransferId);
 
@@ -84,16 +86,16 @@ public class JdbcTransferDao implements TransferDAO {
     }
 
     @Override
-    public void depositAccount(int UserIDReceiver, BigDecimal transferAmount) {
+    public void depositAccount(int UserIDReceiver, BigDecimal amount) {
         String sql = "UPDATE account SET balance = balance + ? WHERE user_id = ?";
-        jdbcTemplate.update(sql, UserIDReceiver, transferAmount);
+        jdbcTemplate.update(sql, UserIDReceiver, amount);
 
     }
 
     @Override
-    public void withdrawAccount(int UserIDSender, BigDecimal transferAmount) {
+    public void withdrawAccount(int userIDSender, BigDecimal amount) {
         String sql = "UPDATE account SET balance = balance - ? WHERE user_id = ?";
-        jdbcTemplate.update(sql, UserIDSender, transferAmount);
+        jdbcTemplate.update(sql, userIDSender, amount);
 
     }
 
