@@ -9,8 +9,12 @@ public interface TransferDao {
 
     List<Transfer> getTransfers();
 
-    Transfer getTransfer(int transferID);
-    Transfer create(int senderAccountID, int receiverAccountID);
+    Transfer getTransfer(int transferId);
+
+    Transfer createTransfer (Transfer newTransfer);
 
 
+    Boolean depositAccount(int userIDReceiver, BigDecimal transferAmount);
+
+    Boolean withdrawAccount(int userIDSender, BigDecimal transferAmount);
 }

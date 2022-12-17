@@ -1,24 +1,22 @@
 package com.techelevator.tenmo.dao;
 
 import com.techelevator.tenmo.model.Transfer;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
 
-public class JdbcTransferDAO implements TransferDao {
+public class JdbcTransferDao implements TransferDao {
 
     private JdbcTemplate jdbcTemplate;
 
-    public JdbcTransferDAO(DataSource dataSource) {
+    public JdbcTransferDao(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
@@ -48,16 +46,39 @@ public class JdbcTransferDAO implements TransferDao {
 
     }
 
+
     @Override
-    public Transfer create(int senderAccountID, int receiverAccountID) {
+    public Transfer createTransfer(Transfer newTransfer) {
+
+        int accountId = newTransfer.getUserIDSender();
+        int receiverAccountId = newTransfer.getUserIDReceiver();
+        BigDecimal transferAmount = newTransfer.getAmount();
+
 
         String sql = "INSERT INTO transfer (account_id, receiver_account_id, transfer_amount) VALUES (?,?,?) RETURNING transfer_id";
-        int newTransferId = jdbcTemplate.queryForObject(sql, Integer.class, senderAccountID, receiverAccountID);
+        int newTransferId = jdbcTemplate.queryForObject(sql, Integer.class);
 
         return getTransfer(newTransferId);
     }
 
+    @Override
+    public Boolean depositAccount(int userIDReceiver, BigDecimal transferAmount) {
+        String sql = "UPDATE account SET balance = balance + ? WHERE user_id = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userIDReceiver, transferAmount);
 
+
+        return true;
+
+    }
+
+    @Override
+    public Boolean withdrawAccount(int userIDSender, BigDecimal transferAmount) {
+        String sql = "UPDATE account SET balance = balance - ? WHERE user_id = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userIDSender, transferAmount);
+
+
+        return true;
+    }
 
     private Transfer mapRowToTransfer(SqlRowSet rs) {
             Transfer transfer = new Transfer();

@@ -15,7 +15,7 @@ public class Transfer {
     private int transferID;
 
     public Transfer(BigDecimal amount, int userIDReceiver, int userIDSender,int transferID){
-        this.amount = BigDecimal.ZERO;
+        this.amount = amount;
         this. userIDReceiver = userIDReceiver;
         this.userIDSender = userIDSender;
         this.transferID = transferID;
@@ -49,7 +49,7 @@ public class Transfer {
         this.amount = amount;
     }
 
-    public int getTransferID(int transferId) {
+    public int getTransferID(int transfer_id) {
         return transferID;
     }
 

@@ -2,7 +2,6 @@ package com.techelevator.tenmo.dao;
 
 
 import com.techelevator.tenmo.model.Account;
-import com.techelevator.tenmo.model.Username;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
@@ -14,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class JdbcAccountDAO implements AccountDAO { //this will have our 'SQL' statements and methods
+public class JdbcAccountDao implements AccountDao { //this will have our 'SQL' statements and methods
 
     private JdbcTemplate jdbcTemplate;
 
-    public JdbcAccountDAO(DataSource dataSource) {
+    public JdbcAccountDao(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         }
 
@@ -96,24 +95,7 @@ public class JdbcAccountDAO implements AccountDAO { //this will have our 'SQL' s
         return account;
     }
 
-    @Override
-    public Boolean depositAccount(int userIDReceiver, BigDecimal transferAmount) {
-        String sql = "UPDATE account SET balance = balance + ? WHERE user_id = ?";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userIDReceiver, transferAmount);
 
-
-        return true;
-
-    }
-
-    @Override
-    public Boolean withdrawAccount(int userIDSender, BigDecimal transferAmount) {
-        String sql = "UPDATE account SET balance = balance - ? WHERE user_id = ?";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userIDSender, transferAmount);
-
-
-        return true;
-    }
 
     private Account mapRowsToUser(SqlRowSet rowset) {
         Account account = new Account();

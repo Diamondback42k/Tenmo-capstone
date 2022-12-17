@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
@@ -20,18 +19,18 @@ public class AccountController {
         @Autowired
         TransferDao transferDao;
         @Autowired
-        AccountDAO dao;
+        AccountDao dao;
         @Autowired
         UserDao userDao;
 
         @PreAuthorize("hasRole('USER')")
-        @RequestMapping(path = "/accounts/get-users", method = RequestMethod.GET)
+        @RequestMapping(path = "/get-users", method = RequestMethod.GET)
         public List<User> findAll(){
                 return userDao.findAll();
                 }
 
         @PreAuthorize("hasRole('USER')")
-        @RequestMapping(path = "/accounts/get-accounts", method = RequestMethod.GET)
+        @RequestMapping(path = "/get-accounts", method = RequestMethod.GET)
         public List<Account> findAccounts() {
                 return dao.getAccounts();
         }
@@ -63,12 +62,9 @@ public class AccountController {
 
         @PreAuthorize("hasRole('USER')")
         @RequestMapping(path = "/transfer-create", method = RequestMethod.POST)
-        public Transfer createTransfer(Principal principal){
+        public Transfer createTransfer(@RequestBody Transfer transfer){
 
-                int userID = userDao.findIdByUsername(principal.getName());
-                int accountId = dao.accountIdByUserId(userID);
-                
-                return transferDao.create(accountId,);
+                return transferDao.createTransfer(transfer);
 
         }
 
@@ -76,17 +72,17 @@ public class AccountController {
 
         @PreAuthorize("hasRole('USER')")
         @RequestMapping(path = "/transfer-update", method = RequestMethod.PUT)
-       public BigDecimal transferUpdate(BigDecimal transferAmount, int accountID, Principal principal) {
+       public Boolean transferUpdate(BigDecimal transferAmount, int accountID, Principal principal) {
 
                 int userIDSender  = userDao.findIdByUsername(principal.getName());
 
 
                 if (dao.getBalance(userIDSender).compareTo(transferAmount) >= 0) {
-                        if (dao.withdrawAccount(userIDSender,transferAmount)) {
-                             dao.depositAccount(accountID, transferAmount);
+                        if (transferDao.withdrawAccount(userIDSender,transferAmount)) {
+                             transferDao.depositAccount(accountID, transferAmount);
                         }
                 }
-                return BigDecimal.valueOf(0);
+                return true;
         }
 
 
