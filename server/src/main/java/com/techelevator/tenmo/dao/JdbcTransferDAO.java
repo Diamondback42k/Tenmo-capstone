@@ -67,7 +67,12 @@ public class JdbcTransferDao implements TransferDAO {
 
              newTransferId = jdbcTemplate.queryForObject(sql, Integer.class, transfer.getUserIDSender(), transfer.getUserIDReceiver(), transfer.getAmount());
              transfer.setTransferID(newTransferId);
-        //call up your methods to withdraw transfer amount------deposit method / withdraw method
+
+             depositAccount(transfer.getUserIDReceiver(), transfer.getAmount());
+
+             withdrawAccount(transfer.getUserIDSender(), transfer.getAmount());
+
+
              return getTransfer(newTransferId);
 
         }catch(DataAccessException e){
@@ -76,20 +81,19 @@ public class JdbcTransferDao implements TransferDAO {
     }
 
     @Override
-    public Boolean depositAccount(int userIDReceiver, BigDecimal transferAmount) {
+    public void depositAccount(int userIDReceiver, BigDecimal transferAmount) {
         String sql = "UPDATE account SET balance = balance + ? WHERE user_id = ?";
-        jdbcTemplate.update(sql, userIDReceiver, transferAmount);
+        jdbcTemplate.update(sql, transferAmount, userIDReceiver);
 
-        return true;
+
 
     }
 
     @Override
-    public Boolean withdrawAccount(int userIDSender, BigDecimal transferAmount) {
+    public void withdrawAccount(int userIDSender, BigDecimal transferAmount) {
         String sql = "UPDATE account SET balance = balance - ? WHERE user_id = ?";
-        jdbcTemplate.update(sql, userIDSender, transferAmount);
+        jdbcTemplate.update(sql, transferAmount, userIDSender);
 
-        return true;
     }
 
     private Transfer mapRowToTransfer(SqlRowSet rs) {

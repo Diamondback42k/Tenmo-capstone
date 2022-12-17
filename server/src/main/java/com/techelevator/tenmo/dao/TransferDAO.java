@@ -14,7 +14,7 @@ public interface TransferDAO {
     Transfer createTransfer (Transfer transfer);
 
 
-    Boolean depositAccount(int userIDReceiver, BigDecimal transferAmount);
+    void depositAccount(int userIDReceiver, BigDecimal transferAmount);
 
-    Boolean withdrawAccount(int userIDSender, BigDecimal transferAmount);
+    void withdrawAccount(int userIDSender, BigDecimal transferAmount);
 }

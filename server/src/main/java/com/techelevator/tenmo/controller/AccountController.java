@@ -80,9 +80,7 @@ public class AccountController {
 
 
                 if (dao.getBalance(userIDSender).compareTo(transferAmount) >= 0) {
-                        if (transferDao.withdrawAccount(userIDSender,transferAmount)) {
-                             transferDao.depositAccount(accountID, transferAmount);
-                        }
+
                 }
                 return true;
         }
