@@ -14,15 +14,6 @@ import static org.springframework.test.util.AssertionErrors.assertEquals;
 
 public class JdbcAccountDAOTests extends BaseDaoTests{
 
-    //We need to create mock data so we don't use our actual database
-    //
-    //
-    private static final Account Account_1 = new Account(2001,1001, BigDecimal.valueOf(1000.00));
-    private static final Account Account_2 = new Account(2002,1002, BigDecimal.valueOf(1000.00));
-
-
-    private Account testAccount;
-
     private JdbcAccountDAO sut;
 
     @Before
@@ -36,8 +27,8 @@ public class JdbcAccountDAOTests extends BaseDaoTests{
         int expectedId = 2001;
         BigDecimal expectedBalance = BigDecimal.valueOf(1000.00).setScale(2, RoundingMode.HALF_DOWN);
         int expectedUserId = 1001;
-
         Account account = sut.getAccount(2001);
+
         Assert.assertEquals(expectedId, account.getAccountId());
         Assert.assertEquals(expectedBalance, account.getBalance());
         Assert.assertEquals(expectedUserId, account.getUserId());
@@ -54,15 +45,12 @@ public class JdbcAccountDAOTests extends BaseDaoTests{
         List<Account> accounts = sut.getAccounts();
         Assert.assertEquals(2, accounts.size());
 
-
-
     }
 
     @Test
     public void getBalance_returns_correct_balance_with_accountID(){
 
         Account account = sut.getAccount(2001);
-
         BigDecimal actualBalance = sut.getBalance(account.getAccountId());
         BigDecimal expectedBalance = BigDecimal.valueOf(1000.00).setScale(2, RoundingMode.HALF_DOWN);
 
@@ -72,28 +60,23 @@ public class JdbcAccountDAOTests extends BaseDaoTests{
 
     @Test
     public void findAccountByUserId() {
-
-        
+        int expected = 1001;
+        Account actual = sut.getAccount(2001);
+        Assert.assertEquals(expected, actual.getUserId());
 
     }
 
     @Test
     public void accountIdByUserId() {
+        int expected = 2001;
+        Account actual = sut.getAccount(2001);
+        Assert.assertEquals(expected, actual.getAccountId());
     }
 
-    @Test
-    public void receiverId() {
-    }
-
-
-private void assertAccountsMatch(Account expected, Account actual){
+    private void assertAccountsMatch(Account expected, Account actual){
         Assert.assertEquals(expected.getAccountId(), actual.getAccountId());
         Assert.assertEquals(expected.getBalance(), actual.getBalance());
         Assert.assertEquals(expected.getUserId(), actual.getUserId());
 }
-
-//private void assertBalancesMatch(BigDecimal expected, BigDecimal actual){
-//        Assert.assertEquals(expected.ge)
-//}
 
 }

@@ -12,6 +12,8 @@ public interface TransferDAO {
 
     Transfer getTransfer(int transferId);
 
+    int receiverId(int transferId);
+
     Transfer createTransfer (Transfer transfer);
 
     void depositAccount(int accountIDReceiver, BigDecimal transferAmount);

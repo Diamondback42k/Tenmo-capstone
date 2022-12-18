@@ -23,13 +23,6 @@ public class JdbcTransferDao implements TransferDAO {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-//    @Override
-//    public Transfer senderFunction(){
-//        String sql = "UPDATE account SET balance = balance - 100 WHERE user_id = 1001;";
-//
-//    }
-
-
     @Override
     public List<Transfer> getTransfers(int accountID) {
         List<Transfer> transfers = new ArrayList<>();
@@ -55,6 +48,18 @@ public class JdbcTransferDao implements TransferDAO {
 
     }
 
+    @Override
+    public int receiverId(int transferId){
+        String sql = "SELECT receiver_account_id FROM transfer WHERE transfer_id = ?;";
+        Integer receivingId;
+        try{
+            receivingId = jdbcTemplate.queryForObject(sql, Integer.class, transferId);
+        } catch(DataAccessException e) {
+            return 0;
+        }
+
+        return receivingId;
+    }
 
     @Override
     public Transfer createTransfer(Transfer transfer) {

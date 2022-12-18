@@ -15,8 +15,6 @@ public interface AccountDAO {
 
     int accountIdByUserId (int userID);
 
-    int receiverId(int transferId );
-
     Account getAccount(int accountId);
 
 
