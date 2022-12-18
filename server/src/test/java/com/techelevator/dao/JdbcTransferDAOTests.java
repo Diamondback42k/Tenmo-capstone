@@ -11,12 +11,18 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 public class JdbcTransferDAOTests extends BaseDaoTests {
 
     private JdbcTransferDao sut;
     private JdbcAccountDAO accountSut;
+
+    int expectedTransferId = 3001;
+    int expectedReceiverAccountId = 2002;
+    BigDecimal expectedTransferAmount = BigDecimal.valueOf(500.00).setScale(2, RoundingMode.HALF_DOWN);
 
     @Before
     public void setup() {
@@ -33,27 +39,33 @@ public class JdbcTransferDAOTests extends BaseDaoTests {
 
     @Test
     public void getTransfer() {
+        Transfer actualTransfer = sut.getTransfer(3001);
 
+        Assert.assertEquals(expectedReceiverAccountId, actualTransfer.getaccountIDReceiver());
+        Assert.assertEquals(expectedTransferId, actualTransfer.getTransferID(3001));
+        Assert.assertEquals(expectedTransferAmount, actualTransfer.getAmount());
     }
 
     @Test
     public void receiverId() {
-
+        int expectedReceiverId = 2002;
+        Assert.assertEquals(expectedReceiverId, sut.receiverId(3001));
     }
 
     @Test
     public void createTransfer() {
+        Transfer expectedTransfer = new Transfer();
+        Transfer actualTestTransfer = new Transfer();
+        expectedTransfer.setTransferID(3003);
+
+        Transfer createdTransfer = sut.createTransfer(actualTestTransfer);
+
+        int createdId = createdTransfer.getTransferID(3003);
+
+        Assert.assertEquals(expectedTransfer.getTransferID(3003), createdId);
 
     }
 
-    @Test
-    public void depositAccount() {
-
-
-    }
-
-    @Test
-    public void withdrawAccount() {
 
     }
     
@@ -69,4 +81,4 @@ public class JdbcTransferDAOTests extends BaseDaoTests {
 
 
 
-}
+
