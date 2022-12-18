@@ -70,11 +70,11 @@ public class JdbcAccountDAO implements AccountDAO { //this will have our 'SQL' s
     }
 
     @Override
-    public int receiverId(int accountId){
-        String sql = "SELECT receiver_account_id FROM transfer WHERE account_id = ?;";
+    public int receiverId(int transferId){
+        String sql = "SELECT receiver_account_id FROM transfer WHERE transfer_id = ?;";
         Integer receivingId;
         try{
-            receivingId = jdbcTemplate.queryForObject(sql, Integer.class, accountId);
+            receivingId = jdbcTemplate.queryForObject(sql, Integer.class, transferId);
         } catch(DataAccessException e) {
             return 0;
         }
@@ -84,7 +84,7 @@ public class JdbcAccountDAO implements AccountDAO { //this will have our 'SQL' s
 
     @Override
     public Account getAccount(int accountId) {
-        String sql = "SELECT * FROM account where Account_id = ?;";
+        String sql = "SELECT * FROM account where account_id = ?;";
         SqlRowSet result = jdbcTemplate.queryForRowSet(sql, accountId);
 
         Account account = null;

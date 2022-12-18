@@ -53,9 +53,7 @@ public class AccountController {
     @RequestMapping(path = "/get-balance", method = RequestMethod.GET)
     public BigDecimal getBalance(Principal principal) {
 
-
         int userID = userDao.findIdByUsername(principal.getName());
-
         BigDecimal balance = dao.getBalance(userID);
 
         return balance;
@@ -94,21 +92,3 @@ public class AccountController {
     }
 
 }
-
-//    @PreAuthorize("hasRole('USER')")
-//    @RequestMapping(path = "/transfer-update", method = RequestMethod.PUT)
-//    public Boolean transferUpdate(@RequestBody Transfer transfer, Principal principal) {
-//        BigDecimal newBalance;
-//        int senderID = userDao.findIdByUsername(principal.getName());//this retrieves the userID for the logged in user using the username
-//        int accountID = dao.accountIdByUserId(senderID); //this takes the userID ^^ and finds the accountID
-//        transfer.setaccountIDSender(accountID);
-//        newBalance = dao.getBalance(senderID).subtract(transfer.getAmount());
-//        // (sender's account balance) - (transfer amount) ------- result = (1000.00) - (250.00).....750.00 BigDecimal ex.)
-//         // if the difference between 'newBalance' compared to 'sender's balance' is 0.00, return true!
-//
-//            return false;
-
-
-
-
-

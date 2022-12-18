@@ -54,7 +54,7 @@ public class TestingDatabaseConfig {
     /* Before any tests are run, this method initializes the datasource and populates the testing db. */
     @Bean
     public DataSource dataSource() throws SQLException {
-        if (ds != null) return ds;
+        if(ds != null) return ds;
         SingleConnectionDataSource dataSource = new SingleConnectionDataSource();
         dataSource.setUrl(String.format("jdbc:postgresql://%s:%s/%s", DB_HOST, DB_PORT, DB_NAME));
         dataSource.setUsername(DB_USER);
@@ -69,6 +69,7 @@ public class TestingDatabaseConfig {
         // You'll find the test-data.sql script file in the test/resources folder.
         ScriptUtils.executeSqlScript(dataSource.getConnection(), new ClassPathResource("test-data.sql"));
         ds = dataSource;
+
         return ds;
     }
 
