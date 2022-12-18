@@ -54,15 +54,14 @@ public class JdbcTransferDAOTests extends BaseDaoTests {
 
     @Test
     public void createTransfer() {
-        Transfer expectedTransfer = new Transfer();
+        int expectedTransferId = 3003;
         Transfer actualTestTransfer = new Transfer();
-        expectedTransfer.setTransferID(3003);
 
         Transfer createdTransfer = sut.createTransfer(actualTestTransfer);
 
         int createdId = createdTransfer.getTransferID(3003);
 
-        Assert.assertEquals(expectedTransfer.getTransferID(3003), createdId);
+        Assert.assertEquals(expectedTransferId, createdId);
 
     }
 
