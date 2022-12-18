@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface TransferDAO {
 
-    List<Transfer> getTransfers();
+    List<Transfer> getTransfers(int accountID);
 
     Transfer getTransfer(int transferId);
 
     Transfer createTransfer (Transfer transfer);
 
-    void depositAccount(int UserIDReceiver, BigDecimal transferAmount);
+    void depositAccount(int accountIDReceiver, BigDecimal transferAmount);
 
-    void withdrawAccount(int UserIDSender, BigDecimal transferAmount);
+    void withdrawAccount(int accountIDSender, BigDecimal transferAmount);
 }

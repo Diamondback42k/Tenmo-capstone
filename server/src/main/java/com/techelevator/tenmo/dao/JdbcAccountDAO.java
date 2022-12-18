@@ -34,9 +34,9 @@ public class JdbcAccountDAO implements AccountDAO { //this will have our 'SQL' s
     }
 
     @Override
-    public BigDecimal getBalance(int userID) {
-        String sql = "SELECT balance FROM account WHERE user_id = ?;";
-        BigDecimal returningBalance = jdbcTemplate.queryForObject(sql, BigDecimal.class, userID);
+    public BigDecimal getBalance(int accountID) {
+        String sql = "SELECT balance FROM account WHERE account_id = ?;";
+        BigDecimal returningBalance = jdbcTemplate.queryForObject(sql, BigDecimal.class, accountID);
 
             if(returningBalance != null){
                 return returningBalance;

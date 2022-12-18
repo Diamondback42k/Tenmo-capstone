@@ -25,18 +25,16 @@ public class JdbcTransferDao implements TransferDAO {
 
 //    @Override
 //    public Transfer senderFunction(){
-//        String sql = "SELECT SUM(account.account_balance) - SUM(transfer.transfer_amount) " +
-//                "FROM account" +
-//                "JOIN transfer ON "
+//        String sql = "UPDATE account SET balance = balance - 100 WHERE user_id = 1001;";
 //
 //    }
 
 
     @Override
-    public List<Transfer> getTransfers() {
+    public List<Transfer> getTransfers(int accountID) {
         List<Transfer> transfers = new ArrayList<>();
         String sql = "SELECT * FROM transfer WHERE account_id = ?;";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, accountID);
         while(results.next()){
             Transfer transfer = mapRowToTransfer(results);
             transfers.add(transfer);
@@ -67,43 +65,49 @@ public class JdbcTransferDao implements TransferDAO {
 
         try {
 
-             newTransferId = jdbcTemplate.queryForObject(sql, Integer.class, transfer.getUserIDSender(), transfer.getUserIDReceiver(), transfer.getAmount());
+             newTransferId = jdbcTemplate.queryForObject(sql, Integer.class, transfer.getaccountIDSender(), transfer.getaccountIDReceiver(), transfer.getAmount());
 
              transfer.setTransferID(newTransferId);
 
-             Transfer newTransfer = getTransfer(newTransferId);
+            if(transfer.getaccountIDSender() != transfer.getaccountIDReceiver()){
 
-             depositAccount(newTransfer.getUserIDReceiver(), newTransfer.getAmount()); // I broke these down 3 different ways and none of them worked lol
+                depositAccount(transfer.getaccountIDReceiver(), transfer.getAmount());
+                withdrawAccount(transfer.getaccountIDSender(), transfer.getAmount());
 
-             withdrawAccount(newTransfer.getUserIDSender(), newTransfer.getAmount());
+                return transfer;
 
-             return getTransfer(newTransferId);
+            } else {
+
+                System.out.println("Change the receiving ID");
+                return null;
+            }
 
         }catch(DataAccessException e){
 
             return null;
         }
-    }
-
-    @Override
-    public void depositAccount(int UserIDReceiver, BigDecimal amount) {
-        String sql = "UPDATE account SET balance = balance + ? WHERE user_id = ?";
-        jdbcTemplate.update(sql, UserIDReceiver, amount);
 
     }
 
     @Override
-    public void withdrawAccount(int userIDSender, BigDecimal amount) {
-        String sql = "UPDATE account SET balance = balance - ? WHERE user_id = ?";
-        jdbcTemplate.update(sql, userIDSender, amount);
+    public void depositAccount(int accountIDReceiver, BigDecimal amount) {
+        String sql = "UPDATE account SET balance = balance + ? WHERE account_id = ?";
+        jdbcTemplate.update(sql, amount, accountIDReceiver);
+
+    }
+
+    @Override
+    public void withdrawAccount(int accountIDSender, BigDecimal amount) {
+        String sql = "UPDATE account SET balance = balance - ? WHERE account_id = ?";
+        jdbcTemplate.update(sql, amount, accountIDSender);
 
     }
 
     private Transfer mapRowToTransfer(SqlRowSet rs) {
             Transfer transfer = new Transfer();
             transfer.getTransferID(rs.getInt("transfer_id"));
-            transfer.setUserIDSender(rs.getInt("account_id"));
-            transfer.setUserIDReceiver(rs.getInt("receiver_account_id"));
+            transfer.setaccountIDSender(rs.getInt("account_id"));
+            transfer.setaccountIDReceiver(rs.getInt("receiver_account_id"));
             transfer.setAmount(rs.getBigDecimal("transfer_amount"));
             return transfer;
         }

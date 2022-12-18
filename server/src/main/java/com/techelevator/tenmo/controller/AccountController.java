@@ -5,9 +5,11 @@ import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.util.List;
@@ -60,33 +62,53 @@ public class AccountController {
     }
 
     @PreAuthorize("hasRole('USER')")
+    @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(path = "/transfer-create", method = RequestMethod.POST)
-    public Transfer createTransfer(@RequestBody Transfer transfer, Principal principal) {
+    public Transfer createTransfer(@Valid @RequestBody Transfer transfer, Principal principal) {
 
-        int senderID = userDao.findIdByUsername(principal.getName());
-        int accountID = dao.accountIdByUserId(senderID);
-        transfer.setUserIDSender(accountID);
-
-        return transferDao.createTransfer(transfer);
-
-    }
-
-
-    @PreAuthorize("hasRole('USER')")
-    @RequestMapping(path = "/transfer-update", method = RequestMethod.PUT)
-    public Boolean transferUpdate(@RequestBody Transfer transfer, Principal principal) {
-        BigDecimal newBalance;
-        int senderID = userDao.findIdByUsername(principal.getName());//this retrieves the userID for the logged in user using the username
-        int accountID = dao.accountIdByUserId(senderID); //this takes the userID ^^ and finds the accountID
-        transfer.setUserIDSender(accountID);
-        newBalance = dao.getBalance(senderID).subtract(transfer.getAmount());
-        // (sender's account balance) - (transfer amount) ------- result = (1000.00) - (250.00).....750.00 BigDecimal ex.)
-        if (newBalance.compareTo(dao.getBalance(senderID)) >= 0) { // if the difference between 'newBalance' compared to 'sender's balance' is 0.00, return true!
-            return true;
+        int senderID = userDao.findIdByUsername(principal.getName()); //this finds the user id
+        int accountID = dao.accountIdByUserId(senderID); //this finds the account id
+        transfer.setaccountIDSender(accountID);
+        if (dao.getBalance(accountID).compareTo(transfer.getAmount()) >= 0) {
+            return transferDao.createTransfer(transfer);
         } else {
-            return false;
+            return null;
         }
 
+    }
+    @PreAuthorize("hasRole('USER')")
+    @RequestMapping(path = "/transfers", method = RequestMethod.GET)
+    public List<Transfer> getTransfers(Principal principal){
+        int senderID = userDao.findIdByUsername(principal.getName());
+        int accountID = dao.accountIdByUserId(senderID);
+
+        return transferDao.getTransfers(accountID);
 
     }
+
+    @PreAuthorize("hasRole('USER')")
+    @RequestMapping(path = "/transfer/{transferID}", method = RequestMethod.GET)
+    public Transfer getTransfer(@PathVariable int transferID){
+
+        return transferDao.getTransfer(transferID);
+    }
+
 }
+
+//    @PreAuthorize("hasRole('USER')")
+//    @RequestMapping(path = "/transfer-update", method = RequestMethod.PUT)
+//    public Boolean transferUpdate(@RequestBody Transfer transfer, Principal principal) {
+//        BigDecimal newBalance;
+//        int senderID = userDao.findIdByUsername(principal.getName());//this retrieves the userID for the logged in user using the username
+//        int accountID = dao.accountIdByUserId(senderID); //this takes the userID ^^ and finds the accountID
+//        transfer.setaccountIDSender(accountID);
+//        newBalance = dao.getBalance(senderID).subtract(transfer.getAmount());
+//        // (sender's account balance) - (transfer amount) ------- result = (1000.00) - (250.00).....750.00 BigDecimal ex.)
+//         // if the difference between 'newBalance' compared to 'sender's balance' is 0.00, return true!
+//
+//            return false;
+
+
+
+
+

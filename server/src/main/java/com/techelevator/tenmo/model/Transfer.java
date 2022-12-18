@@ -1,21 +1,24 @@
 package com.techelevator.tenmo.model;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 
 public class Transfer {
-//    @Min(value = 0, message = "value must be greater than 0.")
+    @DecimalMin(value = "1", message = "value must be greater than 0.")
     private BigDecimal amount;
-//    @NotBlank(message = "field cannot be equal to userIDSender.")
-    private int userIDReceiver;
-//    @NotBlank(message = "field cannot be empty")
-    private int userIDSender;
-//    @NotBlank(message = "field cannot be duplicate")
+    //@NotBlank(message = "field cannot be equal to accountIDSender.")
+    private int accountIDReceiver;
+    //@NotBlank(message = "field cannot be empty")
+    private int accountIDSender;
+    //@NotBlank(message = "field cannot be duplicate")
     private int transferID;
 
-    public Transfer(BigDecimal amount, int userIDReceiver, int userIDSender, int transferID){
+    public Transfer(BigDecimal amount, int accountIDReceiver, int accountIDSender, int transferID){
         this.amount = amount;
-        this.userIDReceiver = userIDReceiver;
-        this.userIDSender = userIDSender;
+        this.accountIDReceiver = accountIDReceiver;
+        this.accountIDSender = accountIDSender;
         this.transferID = transferID;
     }
 
@@ -23,20 +26,20 @@ public class Transfer {
 
     }
 
-    public int getUserIDReceiver() {
-        return userIDReceiver;
+    public int getaccountIDReceiver() {
+        return accountIDReceiver;
     }
 
-    public void setUserIDReceiver(int userIDReceiver) {
-        this.userIDReceiver = userIDReceiver;
+    public void setaccountIDReceiver(int accountIDReceiver) {
+        this.accountIDReceiver = accountIDReceiver;
     }
 
-    public int getUserIDSender() {
-        return this.userIDSender;
+    public int getaccountIDSender() {
+        return this.accountIDSender;
     }
 
-    public void setUserIDSender(int userIDSender) {
-        this.userIDSender = userIDSender;
+    public void setaccountIDSender(int accountIDSender) {
+        this.accountIDSender = accountIDSender;
     }
 
     public BigDecimal getAmount() {
