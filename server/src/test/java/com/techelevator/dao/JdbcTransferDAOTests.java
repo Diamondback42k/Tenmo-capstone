@@ -7,6 +7,9 @@ import com.techelevator.tenmo.model.Transfer;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import javax.sql.DataSource;
 
 import java.util.List;
 
@@ -20,16 +23,16 @@ public class JdbcTransferDAOTests extends BaseDaoTests {
         accountSut = new JdbcAccountDAO(dataSource);
     }
 
-    @Test
-    public void getTransfers() {
-        int expected = 2;
-        Account account = accountSut.findAccountByUserId();
-        List<Transfer> transfers = sut.getTransfers(accountSut.); //need to find a way to call up the account id, because it's required for a List
-
-        Assert.assertEquals(2, transfers.size());
-
-
-    }
+//    @Test
+//    public void getTransfers() {
+////        int expected = 1;
+////        Account account = accountSut.findAccountByUserId(2001);
+//        List<Transfer> transfers = sut.getTransfers(2001);
+//
+//        Assert.assertEquals(1, transfers.size());
+//
+//
+//    }
 
     @Test
     public void getTransfer() {
