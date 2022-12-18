@@ -51,11 +51,16 @@ transfer_id int NOT NULL DEFAULT nextval('seq_transfer_id'),
 );
 
 INSERT INTO tenmo_user (username, password_hash)
-VALUES ('bob', '$2a$10$G/MIQ7pUYupiVi72DxqHquxl73zfd7ZLNBoB2G6zUb.W16imI2.W2'),
-       ('user', '$2a$10$Ud8gSvRS4G1MijNgxXWzcexeXlVs4kWDOkjE7JFIkNLKEuE57JAEy');
+VALUES ('matt', '$2a$10$G/MIQ7pUYupiVi72DxqHquxl73zfd7ZLNBoB2G6zUb.W16imI2.W2'),
+       ('allen', '$2a$10$Ud8gSvRS4G1MijNgxXWzcexeXlVs4kWDOkjE7JFIkNLKEuE57JAEy');
 
 INSERT INTO account (user_id, balance)
-VALUES ('1001', 1000),
-       ('1002', 700);
+VALUES (1001, 1000.00),
+	   (1002, 1000.00);
+
+
+INSERT INTO transfer (account_id, receiver_account_id, transfer_amount)
+VALUES (2001, 2002, 500.00),
+      (2002, 2001, 250.00);
 
 COMMIT;
