@@ -71,24 +71,19 @@ public class JdbcTransferDao implements TransferDAO {
         try {
 
              newTransferId = jdbcTemplate.queryForObject(sql, Integer.class, transfer.getaccountIDSender(), transfer.getaccountIDReceiver(), transfer.getAmount());
-
              transfer.setTransferID(newTransferId);
 
             if(transfer.getaccountIDSender() != transfer.getaccountIDReceiver()){
 
                 depositAccount(transfer.getaccountIDReceiver(), transfer.getAmount());
                 withdrawAccount(transfer.getaccountIDSender(), transfer.getAmount());
-
                 return transfer;
 
             } else {
-
                 System.out.println("Change the receiving ID");
                 return null;
             }
-
         }catch(DataAccessException e){
-
             return null;
         }
 
