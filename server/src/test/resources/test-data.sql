@@ -63,4 +63,5 @@ INSERT INTO transfer (account_id, receiver_account_id, transfer_amount)
 VALUES (2001, 2002, 500.00),
       (2002, 2001, 250.00);
 
+
 COMMIT;
